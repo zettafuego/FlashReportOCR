@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffc000" />
+  <title>FLASH REPORT — Minera Casma</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="app-header">
+      <span class="badge">FOR.SIG.03</span>
+      <div>
+        <h1>FLASH REPORT</h1>
+        <p>CIA. Minera Casma — Foto del manifiesto → Excel oficial (colores y formas de la plantilla)</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Columna izquierda: fotos + IA -->
+      <aside class="card">
+        <h2>1. Fotos</h2>
+        <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Subir fotos">
+          <strong>Arrastra fotos aquí</strong>
+          <span>o haz clic para elegir (manifiesto / evento)</span>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" multiple hidden />
+        <div id="preview" aria-live="polite"></div>
+
+        <div class="field" style="margin-top:14px">
+          <label for="aiProvider">Proveedor de IA (visión / manuscrito)</label>
+          <select id="aiProvider">
+            <option value="openrouter" selected>OpenRouter (por defecto)</option>
+            <option value="gemini">Google Gemini (AI Studio)</option>
+            <option value="xai">xAI Grok Vision</option>
+            <option value="openai">OpenAI GPT-4o</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="geminiKey">API key del proveedor</label>
+          <input type="password" id="geminiKey" placeholder="Pega aquí la clave (solo en este navegador)" autocomplete="off" />
+        </div>
+        <p class="hint" id="providerHint">
+          OpenRouter viene por defecto. La IA lee la letra a mano de la foto.
+        </p>
+        <label class="checks" style="margin:8px 0">
+          <input type="checkbox" id="forceOcr" />
+          Forzar OCR local (sin IA)
+        </label>
+        <p class="hint">
+          <strong>Gemini:</strong> <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> (clave tipo <code>AIza…</code>)<br/>
+          <strong>OpenRouter:</strong> <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">openrouter.ai/keys</a><br/>
+          <strong>xAI:</strong> <a href="https://console.x.ai/" target="_blank" rel="noopener">console.x.ai</a> ·
+          <strong>OpenAI:</strong> <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com</a>
+        </p>
+
+        <div class="actions">
+          <button type="button" class="btn-primary" id="btnReconocer">Reconocer foto</button>
+          <button type="button" class="btn-secondary" id="btnEjemplo">Cargar ejemplo</button>
+        </div>
+
+        <div class="field" style="margin-top:14px">
+          <label for="ocrText">Texto / JSON reconocido</label>
+          <textarea id="ocrText" readonly placeholder="Aquí verás el OCR o el JSON de la IA…"></textarea>
+        </div>
+
+        <div id="status" class="status" role="status"></div>
+      </aside>
+
+      <!-- Formulario = datos del Flash Report -->
+      <main class="card">
+        <h2>2. Datos del reporte</h2>
+
+        <div class="section-title">1. Datos del involucrado y supervisor</div>
+        <div class="row">
+          <div class="field full">
+            <label for="nombres">Nombres y apellidos</label>
+            <input type="text" id="nombres" autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="edad">Edad</label>
+            <input type="text" id="edad" />
+          </div>
+          <div class="field">
+            <label for="dni">DNI</label>
+            <input type="text" id="dni" inputmode="numeric" />
+          </div>
+          <div class="field">
+            <label for="grado_instruccion">Grado de instrucción</label>
+            <input type="text" id="grado_instruccion" />
+          </div>
+          <div class="field">
+            <label for="tiempo_servicio">Tiempo de servicio</label>
+            <input type="text" id="tiempo_servicio" />
+          </div>
+          <div class="field">
+            <label for="area">Área</label>
+            <input type="text" id="area" />
+          </div>
+          <div class="field">
+            <label for="ocupacion">Ocupación</label>
+            <input type="text" id="ocupacion" />
+          </div>
+          <div class="field">
+            <label for="procedencia">Procedencia</label>
+            <input type="text" id="procedencia" />
+          </div>
+          <div class="field">
+            <label for="experiencia">Experiencia total</label>
+            <input type="text" id="experiencia" />
+          </div>
+          <div class="field">
+            <label for="estado_civil">Estado civil</label>
+            <input type="text" id="estado_civil" />
+          </div>
+          <div class="field">
+            <label for="dia_inicio_guardia">Día inicio de guardia</label>
+            <input type="text" id="dia_inicio_guardia" placeholder="DD-MM-AAAA" />
+          </div>
+          <div class="field">
+            <label for="equipo_operado">Equipo operado</label>
+            <input type="text" id="equipo_operado" />
+          </div>
+          <div class="field">
+            <label for="supervisor">Supervisor (jefe directo)</label>
+            <input type="text" id="supervisor" />
+          </div>
+        </div>
+
+        <div class="section-title">2. Datos del evento</div>
+        <div class="row">
+          <div class="field">
+            <label for="fecha_evento">Fecha</label>
+            <input type="text" id="fecha_evento" placeholder="DD-MM-AAAA" />
+          </div>
+          <div class="field">
+            <label for="hora_evento">Hora</label>
+            <input type="text" id="hora_evento" placeholder="HH:MM" />
+          </div>
+          <div class="field full">
+            <label for="lugar">Lugar</label>
+            <input type="text" id="lugar" />
+          </div>
+        </div>
+
+        <label>Tipo</label>
+        <div class="checks">
+          <label><input type="checkbox" name="tipo" value="dano_propiedad" /> Daño a la propiedad</label>
+          <label><input type="checkbox" name="tipo" value="incidente_ambiental" /> Incidente ambiental</label>
+          <label><input type="checkbox" name="tipo" value="incidente" /> Incidente</label>
+          <label><input type="checkbox" name="tipo" value="incidente_peligroso" /> Incidente peligroso</label>
+          <label><input type="checkbox" name="tipo" value="atencion_medica" /> Atención médica</label>
+          <label><input type="checkbox" name="tipo" value="accidente_leve" /> Accidente leve</label>
+          <label><input type="checkbox" name="tipo" value="accidente_incapacitante" /> Accidente incapacitante</label>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="riesgo">Evaluación del riesgo</label>
+            <select id="riesgo">
+              <option value="ALTO">ALTO</option>
+              <option value="MEDIO">MEDIO</option>
+              <option value="BAJO" selected>BAJO</option>
+            </select>
+          </div>
+          <div class="field" style="justify-content:flex-end">
+            <label class="checks" style="margin:0;padding-top:22px">
+              <input type="checkbox" id="requiere_investigacion" checked />
+              Requiere investigación 24 h
+            </label>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label for="descripcion_evento">Descripción del evento</label>
+          <textarea id="descripcion_evento"></textarea>
+        </div>
+        <div class="field full">
+          <label for="descripcion_lesion">Descripción de la lesión o pérdida</label>
+          <textarea id="descripcion_lesion"></textarea>
+        </div>
+        <div class="field full">
+          <label for="causas">Causas / comentarios preliminares</label>
+          <textarea id="causas"></textarea>
+        </div>
+
+        <div class="section-title">Quien reporta</div>
+        <div class="row">
+          <div class="field">
+            <label for="persona_reporta">Persona que reporta</label>
+            <input type="text" id="persona_reporta" />
+          </div>
+          <div class="field">
+            <label for="cargo_reporta">Cargo</label>
+            <input type="text" id="cargo_reporta" placeholder="JEFE DE GUARDIA" />
+          </div>
+        </div>
+
+        <div class="actions" style="margin-top:16px">
+          <button type="button" class="btn-primary" id="btnGenerar">Descargar Excel</button>
+          <button type="button" class="btn-secondary" id="btnPdf">PDF / Imprimir</button>
+          <button type="button" class="btn-ghost" id="btnLimpiar">Limpiar</button>
+        </div>
+        <p class="hint">
+          <strong>Excel:</strong> plantilla oficial (naranja <code>#FFC000</code>, bordes, logo).<br/>
+          <strong>PDF:</strong> abre vista de impresión → elige «Guardar como PDF».<br/>
+          Usa <code>Abrir_Flash_Report.bat</code> para evitar bloqueos del navegador.
+        </p>
+      </main>
+    </div>
+
+    <footer>
+      Formato de reporte de incidentes y accidentes · FLASH REPORT · CIA. Minera Casma
+    </footer>
+  </div>
+
+  <!-- ExcelJS local + plantilla limpia (sin dibujos rotos) + logo -->
+  <script src="exceljs.min.js"></script>
+  <script src="plantilla-b64.js"></script>
+  <script src="logo-b64.js"></script>
+  <!-- Tesseract OCR (CDN; primera vez necesita red) -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

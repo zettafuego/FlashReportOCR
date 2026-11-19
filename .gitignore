@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+.venv/
+.DS_Store
+Thumbs.db
+*.log
+*.sqlite
+uploads/
+salidas/
+ejemplos/
+web/_test_out.xlsx
